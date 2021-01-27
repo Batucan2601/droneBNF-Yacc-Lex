@@ -1,0 +1,172 @@
+<program> ::= <stmtList>
+<stmtList> ::= <stmt> SEMICOLON <stmtList> | <stmt> SEMICOLON
+
+<stmt>   ::= <declaration_stmt>
+		| <assign_stmt>
+		| <init_stmt>
+		| <if_stmt>
+		| <loop_stmt>
+        | <expr>
+		| <print_stmt>
+
+<type> ::= INT
+		| FLOAT 
+		| BOOLEAN
+		| STRING
+
+
+<declaration_stmt>   ::= <funct_declaration> 
+						| <var_declaration_list> 
+						
+<var_declaration_list>   ::= <var_declaration> 
+						|  <var_declaration>
+
+<var_declaration> ::= <type>  IDENTIFER_LITERAL
+
+<funct_declaration> ::= FUNCTION <type> IDENTIFER_LITERAL LP <parameter_list> RP   LCB <stmt_list> RETURN <expr> SEMICOLON RCB
+						| FUNCTION <type> IDENTIFER_LITERAL LP  RP   LCB <stmt_list> RETURN <expr> SEMICOLON RCB
+						| FUNCTION <type> IDENTIFER_LITERAL LP  RP   LCB <stmt_list> RCB
+                        | FUNCTION <type> IDENTIFER_LITERAL LP <parameter_list> RP LCB stmt_list RCB 
+						| FUNCTION  IDENTIFER_LITERAL LP <parameter_list> RP   LCB <stmt_list>  RCB
+						| FUNCTION  IDENTIFER_LITERAL LP  RP   LCB <stmt_list>  RCB
+
+ <parameter_list>    :  IDENTIFIER_LITERAL
+| BOOLEAN_LITERAL
+| INTEGER_LITERAL
+| FLOAT_LITERAL
+| STRING_LITERAL
+| IDENTIFIER_LITERAL COMMA  <parameter_list>;
+| BOOLEAN_LITERAL COMMA  <parameter_list>;
+| INTEGER_LITERAL COMMA  <parameter_list>;
+| FLOAT_LITERAL COMMA  <parameter_list>;
+| STRING_LITERAL COMMA  <parameter_list>;
+
+<init_stmt>   ::= <type> <assign_stmt> 
+
+<if_stmt> ::= IF LP <logic_expr> RP LCB <stmt_list> RCB
+              | IF LP <logic_expr> RP LCB <stmt_list> RCB ELSE LCB <stmt_list> RCB 
+
+<loop_stmt>   ::= <while_stmt> 
+		    	| <for_stmt>  
+
+<while_stmt>   ::= WHILE LP <logic_expr> RP    LCB  <stmt_list> RCB
+		    
+<for_stmt>   ::= FOR LP <init_stmt> SEMICOLON  <logic_expr> SEMICOLON  <stmt>  RP LCB <stmt_list> RCB
+
+<expr>   ::= <arithmetic_expr_level1>
+
+<arithmetic_expr_level1> ::= <arithmetic_expr> PLUS <arithmetic_expr_level2>
+    						| <arithmetic_expr> MINUS <arithmetic_expr_level2>
+							| <arithmetic_expr_level2>
+
+<arithmetic_expr_level2> ::= <arithmetic_expr_level2> MULT <arithmetic_expr_level3>
+							| <arithmetic_expr_level2> DIV <arithmetic_expr_level3>
+							| <arithmetic_expr_level2>  POW <arithmetic_expr_level3>
+							| <arithmetic_expr_level3>
+
+<arithmetic_expr_level3> ::=LP <arithmetic_expr_level1> RP 
+							|  <logic_expr>
+
+
+
+<logic_expr> ::= 
+     <logic_expr> LOR <logic_expr_level2>
+	|<logic_expr_level2>
+
+<logic_expr_level2> ::= <logic_expr2> LAND <logic_expr3>
+						| <logic_expr_level3> 
+
+<logic_expr_level3> ::= <logic_expr_level3> LEQ <logic_expr_level4>
+						| <logic_expr_level3> LNEQ <logic_expr_level4>
+						| <logic_expr_level4>
+
+<logic_expr_level4> ::= <logic_expr_level4> LT <logic_expr_level5>
+						| <logic_expr_level4> LTE <logic_expr_level5>
+						| <logic_expr_level4> GT <logic_expr_level5>
+						| <logic_expr_level4> GTE <logic_expr_level5>
+
+<logic_expr_level5> ::=  LNOT LP <logic_expr_level6> RP
+						| LNOT LP <expr> RP 
+						| <logic_expr_level6>
+
+<logic_expr_level6> ::=   BOOLEAN_LITERAL
+    					 | INTEGER_LITERAL
+    					 | FLOAT_LITERAL
+    					 | STRING_LITERAL
+    					 | IDENTIFIER_LITERAL
+						 | <logic_expr_level7>
+						 
+<logic_expr_level7> ::=   <function_call_expression>
+
+<function_call_expression> ::=  IDENTIFER_LITERAL LP  <parameter_list>  RP
+                         	| IDENTIFER_LITERAL LP RP
+							| <primitive_function>
+
+<primitive_function> ::= 	CONNECT LP IP_ADDRESS COLON port RP
+							| READALTITUDE LP RP
+							| READACCELERATION LP RP
+							| READTEMPERATURE LP RP 
+							| TURNONCAMERA LP RP
+							| TURNOFFCAMERA LP RP 
+							| TAKEPICTURE LP RP
+							| READFROMTIMER LP RP
+							| READSPEEDX LP RP
+							| READSPEEDY LP RP 
+							| READSPEEDZ LP RP 
+							| WAIT LP FLOAT_LITERAL RP
+							| WAIT LP IDENTIFER_LITERAL RP
+							| SETSPEEDX LP FLOAT_LITERAL RP
+							| SETSPEEDX LP IDENTIFER_LITERALRP
+							| SETSPEEDY LP IDENTIFER_LITERALRP
+							| SETSPEEDY LP FLOAT_LITERAL RP
+							| SETSPEEDZ LP FLOAT_LITERAL RP
+							| SETSPEEDZ LP IDENTIFER_LITERALRP
+							| FOLLOWCURVE LP STRING_LITERAL RP
+							| FOLLOWCURVE LP IDENTIFER_LITERALRP
+							| DISCONNECT LP RP 
+							| READCURVE LP RP
+							| SETHEIGHT LP FLOAT_LITERAL RP
+							| SETHEIGHT LP IDENTIFER_LITERALRP
+							| RISE LP FLOAT_LITERAL RP 
+							| RISE LP IDENTIFER_LITERALRP 
+							| DESCEND LP FLOAT_LITERAL RP
+							| DESCEND LP IDENTIFER_LITERALRP
+							| LAND LP RP
+							| MOVEFORWARD LP FLOAT_LITERAL RP
+							| MOVEFORWARD LP IDENTIFER_LITERALRP 
+							| MOVEBACK LP FLOAT_LITERAL RP
+							| MOVEBACK LP IDENTIFER_LITERALRP
+							| MOVERIGHT LP IDENTIFER_LITERALRP
+							| MOVERIGHT LP FLOAT_LITERAL RP
+							| MOVELEFT LP IDENTIFER_LITERALRP
+							| MOVELEFT LP FLOAT_LITERAL RP
+							| STARTVIDEO LP RP
+							| PAUSEVIDEO LP RP
+							| STOPVIDEO LP RP  
+							| READBATTERY LP RP
+							| STOPMOTOR LP RP
+							| READLOCATION LP RP
+							| STARTTIMER LP RP 
+							| STOPTIMER LP RP 
+							| SCAN LP  IDENTIFIER_LITERAL RP 
+							| SAVE LP <parameter_list> RP
+							| ROTATELEFT LP FLOAT_LITERAL RP
+							| ROTATELEFT LP IDENTIFIER_LITERAL RP
+							| ROTATERIGHT LP FLOAT_LITERAL RP
+							| ROTATERIGHT LP IDENTIFIER_LITERAL RP
+							| READINCLINE LP RP
+							| DISCONNECT LP RP
+							| PRINT LP <arithmetic_expr> RP 
+
+
+<assign_stmt> ::= IDENTIFER_LITERAL EQ <expr>
+
+
+<if_stmt> ::= <matched_if_stmt> 
+			| <unmatched_if_stmt>
+
+
+<matched_if_stmt> ::= IF LP <logic_expr> RP LCB<matched>RCB ELSE LCB<matched>RCB
+
+<unmatched_if_stmt> ::= IF LP <logic_expr> RP <stmt>
+				|IF LP <logic_expr> RP <matched_if_stmt> ELSE <unmatched_if_stmt>

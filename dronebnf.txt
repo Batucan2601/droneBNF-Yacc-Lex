@@ -1,0 +1,127 @@
+#connecting to the drone and reading altitude  when the the speed of X direction is greater than Y and Z combined  
+# then if the altitude is less than 1000 you start streaming and wait for 10 seconds. else you just take a photo 
+Connect();
+while(true){
+    if (  ReadSpeedX() > ReadSpeedY() + ReadSpeedZ()   ){
+        float altitude = readAltitude();
+        if ( altitude <  1000 ){
+            TurnOnCamera();
+            Wait(10.0);
+        }
+        else{ 
+            TakePicture();
+        }
+    }
+}
+
+
+
+#now in this example we will calculate the velocity loss due to friction of air from our drone with a function declaration.
+#then print it with a neverending loop
+
+
+function calculateVelocityLoss(){
+    SetSpeed( 10 , 10 , 10 ); #special function which sets the speed
+    float lossX = 10 - ReadSpeedX();
+    float lossY = 10 - ReadSpeedY();
+    float lossZ = 10 - ReadSpeedZ();
+    return ( (lossX ^ 2 + lossY ^ 2 + lossZ ^ 2 ) ^ (1/2) );
+}
+
+Connect();
+while(true){
+    log( calculateVelocityLoss() );
+}
+
+
+
+
+function keepVelocity(x, y, z)
+{
+	isKeep() = true;
+	a = x;
+	b= y;
+	c= z
+
+	while(isKeep)
+	{
+		if(x != a||y!=b||z!=c)
+		{
+			isKeep = false;
+		};		
+				
+	};
+
+	log("The drone couldn't keep its speed stabile");
+};
+
+
+
+#the device will operate as long as it is connected
+Connect();
+while(!Disconnect())
+{
+	log("The device has been started and connected for usage.");
+
+	rise(40);
+	setSpeed(5,5,5);
+	x_Speed = ReadSpeedX();
+	y_Speed = ReadSpeedY();
+	z_Speed = ReadSpeedZ();
+	
+	keepVelocity(x_speed, y_Speed, z_Speed);
+	Land();
+		
+};
+
+
+
+	log("The device disconnected and will return automatically.");
+
+
+
+
+
+
+#This example program allows reaching a destination by following a curve.
+#The aim here is to save a video with some movements.
+#Thus, it is an example of how we can shot artistic videos via the drone
+
+SetSpeedY(10);
+Rise(1.5);
+TurnOnCamera();
+SetSpeedZ(5.0);
+MoveForward(10);
+StartVideo();
+StartTimer();
+
+while(ReadFromTimer() < 10.0){
+ while(ReadAltitude <= 500.0){
+  FollowCurve("y = x ^ 2");
+  if(ReadLocation() == "39° 52' 30.9900''"){
+    log("Reached to Bilkent University");		
+  };									
+ };
+SetSpeed(0);
+SetSpeed(2);
+RotateLeft(360);	
+RotateRight(360);
+};
+
+StopTimer();
+StopVideo();
+
+if(SaveMedia() == true){
+ log("video saved");
+}
+else{
+ log("storage accessed");
+};
+
+TurnOffCamera();
+Disconnect();
+
+
+
+
+
